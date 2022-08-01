@@ -47,7 +47,7 @@ const HomeScreen = () => {
       });
   }, []);
 
-  console.log('featuredCategories', featuredCategories);
+  // console.log('featuredCategories', featuredCategories);
   return (
     <SafeAreaView className='bg-white pt-5'>
       {/* Header */}
@@ -91,25 +91,17 @@ const HomeScreen = () => {
         {/* Categories */}
         <Categories />
 
-        {/* Featured Rows */}
-        <FeaturedRow
-          id='123'
-          title='Featured'
-          description='Paid placements from our partners'
-        />
+        {featuredCategories?.map((category) => (
+          <FeaturedRow
+            key={category._id}
+            id={category._id}
+            title={category.name}
+            description={category.short_description}
+          />
+        ))}
         {/* Tasty Discounts */}
-        <FeaturedRow
-          id='1234'
-          title='Featured'
-          description='Everyone has been enjoying these juicy discounts!'
-        />
-        {/* Offers near you */}
 
-        <FeaturedRow
-          id='12345'
-          title='Featured'
-          description='Why not support your local restaurant tonight!'
-        />
+        {/* Offers near you */}
 
         {/* Products */}
       </ScrollView>
