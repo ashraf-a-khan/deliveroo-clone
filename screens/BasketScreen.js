@@ -1,5 +1,12 @@
-import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
-import React, { useEffect, useMemo, useState } from 'react';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from 'react-native';
+import React, { useMemo, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { selectRestaurant } from '../features/restaurantSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,10 +15,10 @@ import {
   selectBasketItems,
   selectBasketTotal,
 } from '../features/basketSlice';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect } from 'react';
 import { XCircleIcon } from 'react-native-heroicons/solid';
-import Currency from 'react-currency-formatter';
 import { urlFor } from '../sanity';
+import Currency from 'react-currency-formatter';
 
 const BasketScreen = () => {
   const navigation = useNavigation();
@@ -29,7 +36,7 @@ const BasketScreen = () => {
 
     setGroupedItemsInBasket(groupedItems);
   }, [items]);
-  // console.log('groupedItemsInBasket', groupedItemsInBasket);
+
   return (
     <SafeAreaView className='flex-1 bg-white'>
       <View className='flex-1 bg-gray-100'>
@@ -43,7 +50,7 @@ const BasketScreen = () => {
 
           <TouchableOpacity
             onPress={navigation.goBack}
-            className='rounded-full bg-gray-100 absolute top-3 right-5'
+            className='rounded-full bg-gray-100  absolute top-3 right-5'
           >
             <XCircleIcon color='#00CCBB' height={50} width={50} />
           </TouchableOpacity>
@@ -61,7 +68,8 @@ const BasketScreen = () => {
             <Text className='text-[#00CCBB]'>Change</Text>
           </TouchableOpacity>
         </View>
-        <ScrollView>
+
+        <ScrollView className='divide-y divide-gray-200'>
           {Object.entries(groupedItemsInBasket).map(([key, items]) => (
             <View
               key={key}
@@ -72,13 +80,15 @@ const BasketScreen = () => {
                 source={{ uri: urlFor(items[0]?.image).url() }}
                 className='h-12 w-12 rounded-full'
               />
-              <Text className='flex-1'>{items[0]?.name} </Text>
+              <Text className='flex-1'>{items[0]?.name}</Text>
+
               <Text className='text-gray-600'>
                 <Currency quantity={items[0]?.price} currency='GBP' />
               </Text>
+
               <TouchableOpacity>
                 <Text
-                  className='text-[#00CCBB text-xs'
+                  className='text-[#00CCBB] text-xs'
                   onPress={() => dispatch(removeFromBasket({ id: key }))}
                 >
                   Remove
@@ -110,7 +120,10 @@ const BasketScreen = () => {
             </Text>
           </View>
 
-          <TouchableOpacity className='rounded-lg bg-[#00CCBB] p-4'>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PreparingOrderScreen')}
+            className='rounded-lg bg-[#00CCBB] p-4'
+          >
             <Text className='text-center text-white text-lg font-bold'>
               Place Order
             </Text>
